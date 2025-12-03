@@ -1,0 +1,34 @@
+# 1. The Deployment: Keeps the Pod running
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-db
+  template:
+    metadata:
+      labels:
+        app: redis-db
+    spec:
+      containers:
+      - name: redis
+        image: redis:6.2   # Downloads official image
+        ports:
+        - containerPort: 6379
+
+---
+# 2. The Service: Gives it a stable stable name ("redis-service")
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service      # <--- IMPORTANT NAME
+spec:
+  selector:
+    app: redis-db          # Points to the labels above
+  ports:
+    - protocol: TCP
+      port: 6379           # Internal port
+      targetPort: 6379

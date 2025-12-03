@@ -1,0 +1,3 @@
+# Default settings
+replicaCount: 1
+environmentName: "Development"

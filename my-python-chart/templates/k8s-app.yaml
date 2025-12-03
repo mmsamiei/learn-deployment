@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app-deployment
+spec:
+  replicas: {{ .Values.replicaCount }} 
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+      - name: python-container
+        image: my-counter-app    # Image name
+        imagePullPolicy: Never   # <--- REQUIRED FOR MINIKUBE LOCAL IMAGES
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: "redis-service" # Connecting to the Redis Service above
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service
+spec:
+  type: NodePort                 # Exposes it to the outside world
+  selector:
+    app: python-app
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30005            # We request a specific port

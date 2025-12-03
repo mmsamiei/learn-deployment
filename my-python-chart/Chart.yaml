@@ -1,0 +1,6 @@
+apiVersion: v2
+name: my-super-app
+description: My Python + Redis Stack
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
